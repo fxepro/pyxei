@@ -12,7 +12,6 @@
 -------------------------------------------------------------------
 
 
-
 # Netlify deploy – fix “Page not found”
 # Part I  – Setup & Deployment Manual
 
@@ -85,7 +84,46 @@ If the error persists: (1) On **GitHub**, open your repo and confirm the latest 
 
 ---
 
-## 3. Netlify Deployment (and fixing 404)
+## 3. Build script failure – "Build script returned non-zero exit code: 2"
+
+**Problem:** Deploy fails with: *Failed during stage 'building site': Build script returned non-zero exit code: 2*
+
+**Cause:** The build command (`npm run build`) failed. Common causes:
+- TypeScript/compilation errors
+- Missing dependencies (lockfile out of sync)
+- Build script issues (Windows vs Unix paths, env vars)
+- Out of memory or timeout
+- Next.js configuration errors
+
+**Fix:**
+
+1. **Check the build log** in Netlify: **Deploys → [failed deploy] → Build log**. Scroll to the error output — it will show the actual failure (e.g., TypeScript error, missing module, etc.).
+
+2. **Test locally first** (from repo root):
+   ```powershell
+   cd frontend
+   npm install --legacy-peer-deps
+   npm run build
+   ```
+   Fix any errors locally before deploying.
+
+3. **Common fixes:**
+   - **Missing dependencies:** Run `npm install --legacy-peer-deps` in `frontend/`, commit `package-lock.json`, push, then **Clear cache and deploy**.
+   - **TypeScript errors:** Fix TS errors locally, commit, push.
+   - **Build script:** Ensure `frontend/package.json` has `"build": "next build"` (no `NODE_ENV=production` prefix — see §1).
+   - **Out of memory:** Netlify may need more build resources (check plan limits) or optimize the build (reduce dependencies, use dynamic imports).
+
+4. **After fixing locally:**
+   - Commit and push the fixes.
+   - In Netlify: **Deploys → Trigger deploy → Clear cache and deploy site**.
+
+5. **If the error persists:** Check the build log for the specific error message (e.g., "Cannot find module", "Type error", etc.) and address that issue. The exit code 2 is generic; the log shows the real problem.
+
+**Note:** Always commit and push fixes before redeploying. Netlify builds from the repo, not your local files.
+
+---
+
+## 4. Netlify Deployment (and fixing 404)
 
 **Problem:** Site deploys but shows “Page not found” (Netlify’s 404) for the app or for routes like `/dashboard`.
 
@@ -124,7 +162,7 @@ If 404 persists, check the deploy log to ensure the build runs from `frontend` a
 
 ---
 
-## 4. Git Remote and First Push
+## 5. Git Remote and First Push
 
 **Problem:** Need to connect this repo to GitHub and push.
 
@@ -153,7 +191,7 @@ You don’t need GitHub CLI or GitHub Desktop for normal push/pull; plain Git is
 
 ---
 
-## 5. Git Credentials on Windows (after removing CLI/Desktop)
+## 6. Git Credentials on Windows (after removing CLI/Desktop)
 
 **Problem:** After uninstalling GitHub CLI or GitHub Desktop, Git shows a “CredentialHelperSelector” dialog asking how to store credentials.
 
@@ -173,6 +211,7 @@ If `manager` isn’t available, **`wincred`** (Windows Credential Manager) is a 
 | Task                    | Where / What |
 |-------------------------|--------------|
 | Next.js / React (CVE)   | `frontend/package.json` → `"next": "15.3.8"` (or 15.2.8), overrides; commit + push lockfile; **Clear cache and deploy** |
+| Build script failure    | Check Netlify build log for actual error; fix locally (`npm run build`), commit + push, **Clear cache and deploy** |
 | Build script            | `frontend/package.json` → `"build": "next build"` |
 | Netlify config          | One clean `netlify.toml` at repo root, base = `frontend`, plugin = `@netlify/plugin-nextjs` |
 | Netlify plugin          | In `netlify.toml` only (not in package.json) |
