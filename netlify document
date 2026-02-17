@@ -63,7 +63,29 @@ npm run start   # optional: run production build locally
 
 ---
 
-## 2. Netlify Deployment (and fixing 404)
+## 2. Next.js security block (CVE-2025-55182) – deploy rejected with HTTP 400
+
+**Problem:** Deploy fails with: *You're currently using a version of Next.js affected by a critical security vulnerability. To protect your project, we're blocking further deploys until you update your Next.js version.*
+
+**Official:** Netlify’s response (CVE-2025-55182 & CVE-2025-66478): https://ntl.fyi/cve-2025-55182 — Use **`npx fix-react2shell-next`** in `frontend/` to check and fix versions; allow automatic updates of the OpenNext Netlify Next.js adapter.
+
+**Cause:** Netlify blocks deploys when `next` (or React) is in a vulnerable range. Use a **patched** Next.js: **15.2.8** (15.2.x), **15.3.8** (15.3.x), **15.4.10**, **15.5.9**, or **16.0.10**. React **19.2.1+**. See https://nextjs.org/blog/security-update-2025-12-11.
+
+**Fix:**
+
+1. In **`frontend/package.json`**, set a patched Next.js and overrides (e.g. 15.3.8):
+   - `"next": "15.3.8"`
+   - `"react": "^19.2.1"`, `"react-dom": "^19.2.1"`
+   - **`"overrides": { "next": "15.3.8" }`** so no dependency can pull in an older Next.js.
+2. From repo root: `cd frontend` then `npm install --legacy-peer-deps` so **`frontend/package-lock.json`** is updated.
+3. **Commit and push** both `frontend/package.json` and `frontend/package-lock.json`. Netlify builds from the repo — if these aren’t pushed, the deploy will still see the old version.
+4. In Netlify: **Deploys → Trigger deploy → Clear cache and deploy site** (must clear cache so Netlify doesn’t reuse old `node_modules`).
+
+If the error persists: (1) On **GitHub**, open your repo and confirm the latest commit on the branch Netlify builds from contains `frontend/package.json` with `"next": "15.3.8"` (or another patched version). If not, commit and push again. (2) In Netlify, use **Clear cache and deploy site**, not a normal deploy. (3) In the build log, confirm the installed `next` version is patched (e.g. 15.3.8). Do not add `@netlify/plugin-nextjs` to package.json; keep it only in `netlify.toml`.
+
+---
+
+## 3. Netlify Deployment (and fixing 404)
 
 **Problem:** Site deploys but shows “Page not found” (Netlify’s 404) for the app or for routes like `/dashboard`.
 
@@ -102,7 +124,7 @@ If 404 persists, check the deploy log to ensure the build runs from `frontend` a
 
 ---
 
-## 3. Git Remote and First Push
+## 4. Git Remote and First Push
 
 **Problem:** Need to connect this repo to GitHub and push.
 
@@ -131,7 +153,7 @@ You don’t need GitHub CLI or GitHub Desktop for normal push/pull; plain Git is
 
 ---
 
-## 4. Git Credentials on Windows (after removing CLI/Desktop)
+## 5. Git Credentials on Windows (after removing CLI/Desktop)
 
 **Problem:** After uninstalling GitHub CLI or GitHub Desktop, Git shows a “CredentialHelperSelector” dialog asking how to store credentials.
 
@@ -150,9 +172,10 @@ If `manager` isn’t available, **`wincred`** (Windows Credential Manager) is a 
 
 | Task                    | Where / What |
 |-------------------------|--------------|
+| Next.js / React (CVE)   | `frontend/package.json` → `"next": "15.3.8"` (or 15.2.8), overrides; commit + push lockfile; **Clear cache and deploy** |
 | Build script            | `frontend/package.json` → `"build": "next build"` |
 | Netlify config          | One clean `netlify.toml` at repo root, base = `frontend`, plugin = `@netlify/plugin-nextjs` |
-| Netlify plugin           | In `netlify.toml` only (not in package.json) |
+| Netlify plugin          | In `netlify.toml` only (not in package.json) |
 | Git remote              | `git remote add origin https://github.com/fxepro/bibleprotege.git` |
 | Git credentials (Win)   | CredentialHelperSelector → choose **manager**, “Always use this” |
 
