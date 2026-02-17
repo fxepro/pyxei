@@ -1,0 +1,9 @@
+{
+  "name": "Connect Four",
+  "playersActive": 2134,
+  "category": "Board",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "8 minutes"
+}

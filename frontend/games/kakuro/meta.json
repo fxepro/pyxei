@@ -1,0 +1,9 @@
+{
+  "name": "Kakuro",
+  "playersActive": 876,
+  "category": "Puzzle",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Expert",
+  "avgSession": "14 minutes"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Match-3",
+  "playersActive": 8934,
+  "category": "Puzzle",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "8 minutes"
+}

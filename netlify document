@@ -1,0 +1,161 @@
+[build]
+  base    = "frontend"
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+-------------------------------------------------------------------
+
+
+
+# Netlify deploy – fix “Page not found”
+# Part I  – Setup & Deployment Manual
+
+The app lives in **`frontend/`**. Use the config from **Part II** (single `netlify.toml`, plugin in frontend, explicit publish = `.next`).
+
+## Steps in Netlify UI
+
+1. Open your site → **Site configuration** (or **Build & deploy**).
+2. Under **Build settings** → **Configure** (or **Edit settings**):
+   - **Base directory:** `frontend`
+   - **Build command:** `npm run build`
+   - **Publish directory:** `.next`
+3. **Save**.
+4. Go to **Deploys** → **Trigger deploy** → **Clear cache and deploy site**.
+
+## If you still get 404
+
+- In **Deploys**, check the **Build log**: build should succeed from `frontend`, and the Next.js/OpenNext plugin should run without errors.
+- Plugin is in `netlify.toml` only; do not add it to package.json (see Part II).
+
+
+# Part II  – Setup & Deployment Manual
+
+Quick reference so we don’t run into the same issues again. Use this when setting up a new machine, onboarding, or debugging build/deploy.
+
+---
+
+## 1. Building on Windows
+
+**Problem:** `npm run build` fails with something like  
+`'NODE_ENV' is not recognized as an internal or external command`.
+
+**Cause:** The build script used Unix-style env set: `NODE_ENV=production next build`, which doesn’t work in Windows cmd/PowerShell.
+
+**Fix:** In `frontend/package.json`, use a Windows-safe build script:
+
+- **Use:** `"build": "next build"`
+- **Avoid:** `"build": "NODE_ENV=production next build"`
+
+Next.js already runs in production mode when you run `next build`, so the extra env var isn’t needed.
+
+**Commands (from repo root):**
+```powershell
+cd frontend
+npm run build
+npm run start   # optional: run production build locally
+```
+
+---
+
+## 2. Netlify Deployment (and fixing 404)
+
+**Problem:** Site deploys but shows “Page not found” (Netlify’s 404) for the app or for routes like `/dashboard`.
+
+**Cause:** Next.js lives in the `frontend/` subdirectory. Netlify must use the right base directory, build command, and the Next.js plugin so routing works.
+
+**Fix:**
+
+1. **Single, clean `netlify.toml` at repo root** (no duplicate `[build]` or `[[plugins]]` blocks):
+
+   ```toml
+   [build]
+     base    = "frontend"
+     command = "npm run build"
+     publish = ".next"
+
+   [build.environment]
+     NODE_VERSION = "20"
+
+   [[plugins]]
+     package = "@netlify/plugin-nextjs"
+   ```
+
+2. **Plugin**  
+   The plugin is declared in `netlify.toml` only. Do **not** add `@netlify/plugin-nextjs` to `frontend/package.json` — it would change the lockfile and break Netlify’s frozen-lockfile install.
+
+3. **Netlify UI**  
+   In **Site configuration → Build & deploy → Build settings**, set (or leave as “from netlify.toml”):
+   - **Base directory:** `frontend`
+   - **Build command:** `npm run build`
+   - **Publish directory:** `.next`
+
+4. **Redeploy**  
+   Use **Deploys → Trigger deploy → Clear cache and deploy site** after changing config.
+
+If 404 persists, check the deploy log to ensure the build runs from `frontend` and the Next.js/OpenNext plugin runs successfully.
+
+---
+
+## 3. Git Remote and First Push
+
+**Problem:** Need to connect this repo to GitHub and push.
+
+**Steps:**
+
+1. Add the remote (once per repo):
+   ```bash
+   git remote add origin https://github.com/fxepro/bibleprotege.git
+   ```
+
+2. First push (after you have at least one commit):
+   ```bash
+   git add .
+   git commit -m "Initial commit: BibleProtege frontend and docs"
+   git push -u origin main
+   ```
+
+3. Later sync (no GitHub CLI or Desktop required):
+   ```bash
+   git add .
+   git commit -m "Your message"
+   git push
+   ```
+
+You don’t need GitHub CLI or GitHub Desktop for normal push/pull; plain Git is enough.
+
+---
+
+## 4. Git Credentials on Windows (after removing CLI/Desktop)
+
+**Problem:** After uninstalling GitHub CLI or GitHub Desktop, Git shows a “CredentialHelperSelector” dialog asking how to store credentials.
+
+**Fix:**
+
+1. Choose **`manager`** (Git Credential Manager).
+2. Check **“Always use this from now on”**.
+3. Click **Select**.
+
+Git will then store and reuse your GitHub credentials (e.g. via browser or token) for `git push` / `git pull` without asking every time.  
+If `manager` isn’t available, **`wincred`** (Windows Credential Manager) is a good fallback.
+
+---
+
+## Quick checklist
+
+| Task                    | Where / What |
+|-------------------------|--------------|
+| Build script            | `frontend/package.json` → `"build": "next build"` |
+| Netlify config          | One clean `netlify.toml` at repo root, base = `frontend`, plugin = `@netlify/plugin-nextjs` |
+| Netlify plugin           | In `netlify.toml` only (not in package.json) |
+| Git remote              | `git remote add origin https://github.com/fxepro/bibleprotege.git` |
+| Git credentials (Win)   | CredentialHelperSelector → choose **manager**, “Always use this” |
+
+---
+
+*Last updated from setup session; adjust repo URL or paths if the project structure changes.*

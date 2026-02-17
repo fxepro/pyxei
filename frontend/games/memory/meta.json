@@ -1,0 +1,9 @@
+{
+  "name": "Memory",
+  "playersActive": 3421,
+  "category": "Puzzle",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "5 minutes"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Hex",
+  "playersActive": 456,
+  "category": "Board",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Expert",
+  "avgSession": "18 minutes"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Mini Sports",
+  "playersActive": 7654,
+  "category": "Sports",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "7 minutes"
+}

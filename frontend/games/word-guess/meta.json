@@ -1,0 +1,9 @@
+{
+  "name": "Word Guess",
+  "playersActive": 4521,
+  "category": "Word",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "5 minutes"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Reaction",
+  "playersActive": 6543,
+  "category": "Arcade",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "3 minutes"
+}

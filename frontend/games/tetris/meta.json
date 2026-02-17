@@ -1,0 +1,9 @@
+{
+  "name": "Tetris",
+  "playersActive": 5672,
+  "category": "Arcade",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Intermediate",
+  "avgSession": "10 minutes"
+}

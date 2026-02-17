@@ -1,0 +1,9 @@
+{
+  "name": "Bubble Shooter",
+  "playersActive": 9876,
+  "category": "Arcade",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "6 minutes"
+}

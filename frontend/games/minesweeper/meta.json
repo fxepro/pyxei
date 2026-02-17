@@ -1,0 +1,9 @@
+{
+  "name": "Minesweeper",
+  "playersActive": 2345,
+  "category": "Puzzle",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Intermediate",
+  "avgSession": "6 minutes"
+}

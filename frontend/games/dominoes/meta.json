@@ -1,0 +1,9 @@
+{
+  "name": "Dominoes",
+  "playersActive": 1543,
+  "category": "Board",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Intermediate",
+  "avgSession": "15 minutes"
+}

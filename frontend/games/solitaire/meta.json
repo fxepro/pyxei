@@ -1,0 +1,9 @@
+{
+  "name": "Solitaire",
+  "playersActive": 12456,
+  "category": "Card",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "9 minutes"
+}

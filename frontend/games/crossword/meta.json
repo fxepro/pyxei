@@ -1,0 +1,9 @@
+{
+  "name": "Crossword",
+  "playersActive": 3210,
+  "category": "Word",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Intermediate",
+  "avgSession": "13 minutes"
+}

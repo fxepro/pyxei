@@ -1,0 +1,9 @@
+{
+  "name": "2048",
+  "playersActive": 3891,
+  "category": "Puzzle",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Intermediate",
+  "avgSession": "7 minutes"
+}

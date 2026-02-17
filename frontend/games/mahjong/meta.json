@@ -1,0 +1,9 @@
+{
+  "name": "Mahjong",
+  "playersActive": 4567,
+  "category": "Puzzle",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Intermediate",
+  "avgSession": "11 minutes"
+}

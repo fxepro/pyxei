@@ -1,0 +1,9 @@
+{
+  "name": "Chess",
+  "playersActive": 3248,
+  "category": "Board",
+  "library": "chess.js",
+  "license": "BSD-2-Clause",
+  "difficulty": "Expert",
+  "avgSession": "15 minutes"
+}

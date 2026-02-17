@@ -1,0 +1,9 @@
+{
+  "name": "Go",
+  "playersActive": 987,
+  "category": "Board",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Expert",
+  "avgSession": "25 minutes"
+}

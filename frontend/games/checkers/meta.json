@@ -1,0 +1,9 @@
+{
+  "name": "Checkers",
+  "playersActive": 1876,
+  "category": "Board",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Beginner",
+  "avgSession": "12 minutes"
+}

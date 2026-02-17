@@ -1,0 +1,9 @@
+{
+  "name": "Sudoku",
+  "playersActive": 2156,
+  "category": "Puzzle",
+  "library": "custom",
+  "license": "MIT",
+  "difficulty": "Intermediate",
+  "avgSession": "12 minutes"
+}
